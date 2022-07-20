@@ -42,11 +42,11 @@ const TreasureChest = (function () {
   };
 
   /**
-   * Get the total quantity of loot in the treasure chest.
-   * @returns {number} The total quantity of loot.
+   * Get the total loot in the treasure chest.
+   * @returns {string} The total loot.
    */
   TreasureChest.prototype.getLoot = function () {
-    return this.bronze + this.silver + this.gold;
+    return `You have ${this.bronze} bronze, ${this.silver} silver, and ${this.gold} gold.`;
   };
 
   return TreasureChest;
