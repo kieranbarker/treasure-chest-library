@@ -1,6 +1,12 @@
 const TreasureChest = (function () {
   "use strict";
 
+  const quantities = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+  ];
+
   /**
    * Create a new TreasureChest instance.
    * @constructor
@@ -10,6 +16,14 @@ const TreasureChest = (function () {
     this.silver = 0;
     this.gold = 0;
   }
+
+  /**
+   * Get a random quantity of loot.
+   * @returns {number} A number from 1 to 50.
+   */
+  TreasureChest.getRandomLoot = function () {
+    return shuffle(quantities)[0];
+  };
 
   /**
    * Add some bronze to the treasure chest.
@@ -46,8 +60,33 @@ const TreasureChest = (function () {
    * @returns {string} The total loot.
    */
   TreasureChest.prototype.getLoot = function () {
-    return `You have ${this.bronze} bronze, ${this.silver} silver, and ${this.gold} gold.`;
+    return `You have ${this.gold} gold, ${this.silver} silver, and ${this.bronze} bronze.`;
   };
+
+  /**
+   * Randomly shuffle an array.
+   * https://stackoverflow.com/a/2450976/1293256
+   * @param {any[]} array The array to shuffle.
+   * @returns {any[]} The shuffled array.
+   */
+  function shuffle(array) {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
 
   return TreasureChest;
 })();
