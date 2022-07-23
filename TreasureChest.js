@@ -1,11 +1,14 @@
 const TreasureChest = (function () {
   "use strict";
 
-  const quantities = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-  ];
+  const loot = {
+    types: ["bronze", "silver", "gold"],
+    quantities: [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+      22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+      40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+    ],
+  };
 
   /**
    * Create a new TreasureChest instance.
@@ -18,11 +21,13 @@ const TreasureChest = (function () {
   }
 
   /**
-   * Get a random quantity of loot.
-   * @returns {number} A number from 1 to 50.
+   * Generate random loot.
+   * @returns {{ type: string, quantity: number }} The type and quantity of loot found.
    */
   TreasureChest.getRandomLoot = function () {
-    return shuffle(quantities)[0];
+    const [type] = shuffle(loot.types);
+    const [quantity] = shuffle(loot.quantities);
+    return { type, quantity };
   };
 
   /**
