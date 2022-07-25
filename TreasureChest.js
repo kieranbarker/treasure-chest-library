@@ -1,6 +1,8 @@
 const TreasureChest = (function () {
   "use strict";
 
+  const privateFields = new WeakMap();
+
   const loot = {
     types: ["bronze", "silver", "gold"],
     quantities: [
@@ -13,11 +15,28 @@ const TreasureChest = (function () {
   /**
    * Create a new TreasureChest instance.
    * @constructor
+   * @param {Object} options Any user-provided options.
+   * @param {number} options.bronze The initial quantity of bronze.
+   * @param {number} options.silver The initial quantity of silver.
+   * @param {number} options.gold The initial quantity of gold.
+   * @param {string} options.message The message to return from the TreasureChest.prototype.getLoot() method.
    */
-  function TreasureChest() {
-    this.bronze = 0;
-    this.silver = 0;
-    this.gold = 0;
+  function TreasureChest(options = {}) {
+    const defaults = {
+      bronze: 0,
+      silver: 0,
+      gold: 0,
+      message:
+        "You have {{ gold }} gold, {{ silver }} silver, and {{ bronze }} bronze.",
+    };
+
+    const settings = Object.assign(defaults, options);
+
+    this.bronze = settings.bronze;
+    this.silver = settings.silver;
+    this.gold = settings.gold;
+
+    privateFields.set(this, { message: settings.message });
   }
 
   /**
@@ -65,7 +84,11 @@ const TreasureChest = (function () {
    * @returns {string} The total loot.
    */
   TreasureChest.prototype.getLoot = function () {
-    return `You have ${this.gold} gold, ${this.silver} silver, and ${this.bronze} bronze.`;
+    const message = privateFields.get(this).message;
+    return message
+      .replace(/{{\s*gold\s*}}/g, this.gold)
+      .replace(/{{\s*silver\s*}}/g, this.silver)
+      .replace(/{{\s*bronze\s*}}/g, this.bronze);
   };
 
   /**
