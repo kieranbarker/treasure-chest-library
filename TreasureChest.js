@@ -84,7 +84,7 @@ const TreasureChest = (function () {
    * @returns {string} The total loot.
    */
   TreasureChest.prototype.getLoot = function () {
-    const message = privateFields.get(this).message;
+    const { message } = privateFields.get(this);
     return message
       .replace(/{{\s*gold\s*}}/g, this.gold)
       .replace(/{{\s*silver\s*}}/g, this.silver)
