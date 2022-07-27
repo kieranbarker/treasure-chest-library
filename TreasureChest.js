@@ -12,84 +12,85 @@ const TreasureChest = (function () {
     ],
   };
 
-  /**
-   * Create a new TreasureChest instance.
-   * @constructor
-   * @param {Object} options Any user-provided options.
-   * @param {number} options.bronze The initial quantity of bronze.
-   * @param {number} options.silver The initial quantity of silver.
-   * @param {number} options.gold The initial quantity of gold.
-   * @param {string} options.message The message to return from the TreasureChest.prototype.getLoot() method.
-   */
-  function TreasureChest(options = {}) {
-    const defaults = {
-      bronze: 0,
-      silver: 0,
-      gold: 0,
-      message:
-        "You have {{ gold }} gold, {{ silver }} silver, and {{ bronze }} bronze.",
-    };
+  class TreasureChest {
+    /**
+     * Create a new TreasureChest instance.
+     * @param {Object} options Any user-provided options.
+     * @param {number} [options.bronze] The initial quantity of bronze.
+     * @param {number} [options.silver] The initial quantity of silver.
+     * @param {number} [options.gold] The initial quantity of gold.
+     * @param {string} [options.message] The message to return from the TreasureChest.prototype.getLoot() method.
+     */
+    constructor(options = {}) {
+      const defaults = {
+        bronze: 0,
+        silver: 0,
+        gold: 0,
+        message:
+          "You have {{ gold }} gold, {{ silver }} silver, and {{ bronze }} bronze.",
+      };
 
-    const settings = Object.assign(defaults, options);
+      const settings = Object.assign(defaults, options);
 
-    this.bronze = settings.bronze;
-    this.silver = settings.silver;
-    this.gold = settings.gold;
+      this.bronze = settings.bronze;
+      this.silver = settings.silver;
+      this.gold = settings.gold;
 
-    privateFields.set(this, { message: settings.message });
+      privateFields.set(this, { message: settings.message });
+    }
+
+    /**
+     * Generate random loot.
+     * @returns {{ type: string, quantity: number }} The type and quantity of loot found.
+     */
+    static getRandomLoot() {
+      const [type] = shuffle(loot.types);
+      const [quantity] = shuffle(loot.quantities);
+      return { type, quantity };
+    }
+
+    /**
+     * Add some bronze to the treasure chest.
+     * @param {number} bronze The quantity of bronze to add.
+     * @returns {TreasureChest} The current TreasureChest instance.
+     */
+    addBronze(bronze = 0) {
+      this.bronze += bronze;
+      return this;
+    }
+
+    /**
+     * Add some silver to the treasure chest.
+     * @param {number} silver The quantity of silver to add.
+     * @returns {TreasureChest} The current TreasureChest instance.
+     */
+    addSilver(silver = 0) {
+      this.silver += silver;
+      return this;
+    }
+
+    /**
+     * Add some gold to the treasure chest.
+     * @param {number} gold The quantity of gold to add.
+     * @returns {TreasureChest} The current TreasureChest instance.
+     */
+    addGold(gold = 0) {
+      this.gold += gold;
+      return this;
+    }
+
+    /**
+     * Get the total loot in the treasure chest.
+     * @returns {string} The total loot.
+     */
+    getLoot() {
+      const { message } = privateFields.get(this);
+      return message
+        .replace(/{{\s*gold\s*}}/g, this.gold)
+        .replace(/{{\s*silver\s*}}/g, this.silver)
+        .replace(/{{\s*bronze\s*}}/g, this.bronze);
+    }
   }
-
-  /**
-   * Generate random loot.
-   * @returns {{ type: string, quantity: number }} The type and quantity of loot found.
-   */
-  TreasureChest.getRandomLoot = function () {
-    const [type] = shuffle(loot.types);
-    const [quantity] = shuffle(loot.quantities);
-    return { type, quantity };
-  };
-
-  /**
-   * Add some bronze to the treasure chest.
-   * @param {number} bronze The quantity of bronze to add.
-   * @returns {TreasureChest} The current TreasureChest instance.
-   */
-  TreasureChest.prototype.addBronze = function (bronze = 0) {
-    this.bronze += bronze;
-    return this;
-  };
-
-  /**
-   * Add some silver to the treasure chest.
-   * @param {number} silver The quantity of silver to add.
-   * @returns {TreasureChest} The current TreasureChest instance.
-   */
-  TreasureChest.prototype.addSilver = function (silver = 0) {
-    this.silver += silver;
-    return this;
-  };
-
-  /**
-   * Add some gold to the treasure chest.
-   * @param {number} gold The quantity of gold to add.
-   * @returns {TreasureChest} The current TreasureChest instance.
-   */
-  TreasureChest.prototype.addGold = function (gold = 0) {
-    this.gold += gold;
-    return this;
-  };
-
-  /**
-   * Get the total loot in the treasure chest.
-   * @returns {string} The total loot.
-   */
-  TreasureChest.prototype.getLoot = function () {
-    const { message } = privateFields.get(this);
-    return message
-      .replace(/{{\s*gold\s*}}/g, this.gold)
-      .replace(/{{\s*silver\s*}}/g, this.silver)
-      .replace(/{{\s*bronze\s*}}/g, this.bronze);
-  };
 
   /**
    * Randomly shuffle an array.
