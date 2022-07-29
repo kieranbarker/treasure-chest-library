@@ -77,12 +77,24 @@ class TreasureChest {
     return this.#bronze;
   }
 
+  set bronze(bronze) {
+    if (!isNaN(bronze)) this.#bronze = Number(bronze);
+  }
+
   get silver() {
     return this.#silver;
   }
 
+  set silver(silver) {
+    if (!isNaN(silver)) this.#silver = Number(silver);
+  }
+
   get gold() {
     return this.#gold;
+  }
+
+  set gold(gold) {
+    if (!isNaN(gold)) this.#gold = Number(gold);
   }
 
   /**
@@ -91,7 +103,7 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addBronze(bronze = 0) {
-    this.#bronze += bronze;
+    if (!isNaN(bronze)) this.#bronze += Number(bronze);
     return this;
   }
 
@@ -101,7 +113,7 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addSilver(silver = 0) {
-    this.#silver += silver;
+    if (!isNaN(silver)) this.#silver += Number(silver);
     return this;
   }
 
@@ -111,7 +123,7 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addGold(gold = 0) {
-    this.#gold += gold;
+    if (!isNaN(gold)) this.#gold += Number(gold);
     return this;
   }
 
