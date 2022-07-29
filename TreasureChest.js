@@ -54,7 +54,7 @@ class TreasureChest {
    * @param {number} [options.bronze] The initial quantity of bronze.
    * @param {number} [options.silver] The initial quantity of silver.
    * @param {number} [options.gold] The initial quantity of gold.
-   * @param {string} [options.message] The message to return from the TreasureChest.prototype.getLoot() method.
+   * @param {string} [options.message] The message for the TreasureChest.prototype.loot property.
    */
   constructor(options = {}) {
     const defaults = {
@@ -97,6 +97,13 @@ class TreasureChest {
     if (!isNaN(gold)) this.#gold = Number(gold);
   }
 
+  get loot() {
+    return this.#message
+      .replace(/{{\s*gold\s*}}/g, this.gold)
+      .replace(/{{\s*silver\s*}}/g, this.silver)
+      .replace(/{{\s*bronze\s*}}/g, this.bronze);
+  }
+
   /**
    * Add some bronze to the treasure chest.
    * @param {number} bronze The quantity of bronze to add.
@@ -125,16 +132,5 @@ class TreasureChest {
   addGold(gold = 0) {
     if (!isNaN(gold)) this.#gold += Number(gold);
     return this;
-  }
-
-  /**
-   * Get the total loot in the treasure chest.
-   * @returns {string} The total loot.
-   */
-  getLoot() {
-    return this.#message
-      .replace(/{{\s*gold\s*}}/g, this.gold)
-      .replace(/{{\s*silver\s*}}/g, this.silver)
-      .replace(/{{\s*bronze\s*}}/g, this.bronze);
   }
 }
