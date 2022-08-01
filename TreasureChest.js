@@ -14,6 +14,22 @@ class TreasureChest {
   };
 
   /**
+   * Emit a custom event.
+   * @param {string} type The event type.
+   * @param {*} [detail] Any details to pass along with the event.
+   * @returns {boolean} Whether the event was cancelled.
+   */
+  static #emit(type, detail) {
+    const event = new CustomEvent(`treasure:${type}`, {
+      detail,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    return document.dispatchEvent(event);
+  }
+
+  /**
    * Randomly shuffle an array.
    * https://stackoverflow.com/a/2450976/1293256
    * @param {any[]} array The array to shuffle.
@@ -54,7 +70,7 @@ class TreasureChest {
    * @param {number} [options.bronze] The initial quantity of bronze.
    * @param {number} [options.silver] The initial quantity of silver.
    * @param {number} [options.gold] The initial quantity of gold.
-   * @param {string} [options.message] The message for the TreasureChest.prototype.loot property.
+   * @param {string} [options.message] The message to return from the TreasureChest.prototype.getLoot() method.
    */
   constructor(options = {}) {
     const defaults = {
@@ -73,35 +89,23 @@ class TreasureChest {
     this.#message = settings.message;
   }
 
-  get bronze() {
+  getBronze() {
     return this.#bronze;
   }
 
-  set bronze(bronze) {
-    if (!isNaN(bronze)) this.#bronze = Number(bronze);
-  }
-
-  get silver() {
+  getSilver() {
     return this.#silver;
   }
 
-  set silver(silver) {
-    if (!isNaN(silver)) this.#silver = Number(silver);
-  }
-
-  get gold() {
+  getGold() {
     return this.#gold;
   }
 
-  set gold(gold) {
-    if (!isNaN(gold)) this.#gold = Number(gold);
-  }
-
-  get loot() {
+  getLoot() {
     return this.#message
-      .replace(/{{\s*gold\s*}}/g, this.gold)
-      .replace(/{{\s*silver\s*}}/g, this.silver)
-      .replace(/{{\s*bronze\s*}}/g, this.bronze);
+      .replace(/{{\s*gold\s*}}/g, this.#gold)
+      .replace(/{{\s*silver\s*}}/g, this.#silver)
+      .replace(/{{\s*bronze\s*}}/g, this.#bronze);
   }
 
   /**
@@ -110,7 +114,13 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addBronze(bronze = 0) {
-    if (!isNaN(bronze)) this.#bronze += Number(bronze);
+    const quantity = Number(bronze);
+
+    if (!Number.isNaN(quantity)) {
+      this.#bronze += quantity;
+      TreasureChest.#emit("bronze", { quantity });
+    }
+
     return this;
   }
 
@@ -120,7 +130,13 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addSilver(silver = 0) {
-    if (!isNaN(silver)) this.#silver += Number(silver);
+    const quantity = Number(silver);
+
+    if (!Number.isNaN(quantity)) {
+      this.#silver += quantity;
+      TreasureChest.#emit("silver", { quantity });
+    }
+
     return this;
   }
 
@@ -130,7 +146,13 @@ class TreasureChest {
    * @returns {TreasureChest} The current TreasureChest instance.
    */
   addGold(gold = 0) {
-    if (!isNaN(gold)) this.#gold += Number(gold);
+    const quantity = Number(gold);
+
+    if (!Number.isNaN(quantity)) {
+      this.#gold += quantity;
+      TreasureChest.#emit("gold", { quantity });
+    }
+
     return this;
   }
 }
