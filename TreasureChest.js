@@ -118,7 +118,7 @@ class TreasureChest {
 
     if (!Number.isNaN(quantity)) {
       this.#bronze += quantity;
-      TreasureChest.#emit("bronze", { quantity });
+      TreasureChest.#emit("bronze", this);
     }
 
     return this;
@@ -134,7 +134,7 @@ class TreasureChest {
 
     if (!Number.isNaN(quantity)) {
       this.#silver += quantity;
-      TreasureChest.#emit("silver", { quantity });
+      TreasureChest.#emit("silver", this);
     }
 
     return this;
@@ -150,7 +150,7 @@ class TreasureChest {
 
     if (!Number.isNaN(quantity)) {
       this.#gold += quantity;
-      TreasureChest.#emit("gold", { quantity });
+      TreasureChest.#emit("gold", this);
     }
 
     return this;
